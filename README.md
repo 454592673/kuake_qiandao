@@ -42,3 +42,5 @@
 ## Github Actions自动签到配置
 
 ![img.png](docs/secrets.png)
+
+要记得修改文件
