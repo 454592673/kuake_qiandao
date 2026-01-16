@@ -2,8 +2,8 @@ name: Keepalive Workflow
 
 on:
   schedule:
-    - cron: '0 0 1 * *' # 每月1号运行一次
-  workflow_dispatch: # 支持手动触发测试
+    - cron: '0 0 1 * *' # 每月1号运行
+  workflow_dispatch: # 支持手动触发
 
 jobs:
   keepalive:
@@ -12,7 +12,13 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Keepalive Workflow
-        uses: gautamkrishnar/keepalive-workflow@v2
-        with:
-          use_api: true # 使用 API 方式刷新活动，不会产生 commit
+      
+      - name: Manual Keepalive Activity
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # 创建一个时间戳文件来产生实际的修改
+          echo "Last active: $(date)" > .github/keepalive.txt
+          git add .github/keepalive.txt
+          git commit -m "Chore: keep workflow active [skip ci]"
+          git push
